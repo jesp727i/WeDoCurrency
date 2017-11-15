@@ -1,22 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
+using System.Net.Http;
+using System.Xml;
+using Newtonsoft.Json;
+using WeDoCurrency.Model;
 
 namespace WeDoCurrency.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api")]
     public class ValuesController : Controller
     {
         // GET api/values
         [HttpGet]
-        public IEnumerable<string> Get()
+        [Route("Values")]
+        public Currency Get()
         {
-            return new string[] { "value1", "value2" };
+
+           
+            WebClient request = new WebClient();
+			var url = "https://api.fixer.io/latest?base=DKK";
+			var response = request.DownloadString(url);
+
+			var curObject = JsonConvert.DeserializeObject<Currency>(response);
+            logger.generateEventLog(curObject);
+			return curObject;
+
         }
 
-        // GET api/values/5
+        /* GET api/values/5
         [HttpGet("{id}")]
         public string Get(int id)
         {
@@ -39,6 +55,6 @@ namespace WeDoCurrency.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
-        }
+        }*/
     }
 }
