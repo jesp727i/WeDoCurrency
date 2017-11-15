@@ -7,8 +7,11 @@ using WeDoCurrency.Dal;
 
 namespace WeDoCurrency.Model
 {
-    public static class logger
+    public static class Logger
     {
+		//This method generate a string, with the current date, and time in hours and minutes
+		//It also fill this string with all the current currencies and their exchangerate
+		//At the end it call the method in DAL, that write the log event string to a file.
         public static void generateEventLog(Currency currency)
         {
             string logString = "";

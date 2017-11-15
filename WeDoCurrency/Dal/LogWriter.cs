@@ -10,9 +10,11 @@ namespace WeDoCurrency.Dal
     {
         public static void Write(string logString)
         {
-
-            using (StreamWriter writer = new StreamWriter("Test.txt", true))
-            writer.WriteLine(logString);
+			//This writes to a file called Test.Txt, and creates a new file if it doesnt exist
+			using (StreamWriter writer = new StreamWriter("Test.txt", true))
+			{
+				writer.WriteLine(logString);
+			}
         }
     }
 }

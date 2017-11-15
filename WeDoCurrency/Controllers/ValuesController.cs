@@ -15,23 +15,52 @@ namespace WeDoCurrency.Controllers
     [Route("api")]
     public class ValuesController : Controller
     {
+		Currency curObject;
+		public ValuesController()
+		{
+			try
+			{
+				WebClient request = new WebClient();
+				var url = "https://api.fixer.io/latest?base=DKK";
+				var response = request.DownloadString(url);
+
+				curObject = JsonConvert.DeserializeObject<Currency>(response);
+			}
+			catch (Exception e)
+			{
+				string error = "Error" + e;
+
+				GetFallBackExchangeRate();
+				
+			}
+			
+		}
+
+		//
         // GET api/values
         [HttpGet]
-        [Route("Values")]
-        public Currency Get()
+        [Route("GetExchangeRates")]
+        public Currency GetExchangeRates()
         {
+			//Logger.generateEventLog(curObject);
 
-           
-            WebClient request = new WebClient();
-			var url = "https://api.fixer.io/latest?base=DKK";
-			var response = request.DownloadString(url);
-
-			var curObject = JsonConvert.DeserializeObject<Currency>(response);
-            logger.generateEventLog(curObject);
 			return curObject;
-
         }
 
+		// GET api/fallback
+		
+		public string GetFallBackExchangeRate()
+		{
+
+			WebClient request = new WebClient();
+			var url = "http://openexchangerates.org/latest.json";
+			var response = request.DownloadString(url);
+
+			//curObject = JsonConvert.DeserializeObject<Currency>(response);
+
+
+			return response;
+		}
         /* GET api/values/5
         [HttpGet("{id}")]
         public string Get(int id)
